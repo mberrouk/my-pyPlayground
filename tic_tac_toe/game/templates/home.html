@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+    <h1> Hello </h1>
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <form id="form" action="/" method="post">
+      {% csrf_token %}
+      <input id="room-id" type="number" name="room-id" placeholder="Entre room id to join #TODO">
+      <input id="player-name" type="text" name="player-name" value="" > 
+      <button id="button">Create room<button>
+    </form>
+  </body>
+
+</html>

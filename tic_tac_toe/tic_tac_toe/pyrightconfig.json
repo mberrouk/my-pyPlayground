@@ -1,0 +1,24 @@
+{
+  "venvPath": "/Users/mberrouk/chat_APP/.venv/",
+  "include": [
+    "**/*.py"
+  ],
+  "stubPath": "./.stubs/",
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__"
+  ],
+  "reportMissingImports": true,
+  "reportUnusedImports": true,
+  "reportUnusedLocal": true,
+  "reportLineTooLong": "none",
+  "typeCheckingMode": "basic",
+  "extraPaths": [
+    "/Users/mberrouk/chat_APP/.venv/lib/python3.12/site-packages"
+  ],
+  "files": {
+    "settings.py": {
+      "reportLineTooLong": false,
+    }
+  }
+}

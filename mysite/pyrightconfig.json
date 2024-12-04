@@ -1,0 +1,13 @@
+{
+  "venvPath": "../.venv/",
+  "include": ["**/*.py"],
+  "stubPath": "./.stubs/",
+  "exclude": ["**/node_modules", "**/__pycache__"],
+  "reportMissingImports": true,
+  "reportUnusedImports": true,
+  "reportUnusedLocal": true,
+  "extraPaths": [
+    "../.venv/lib/python3.12/site-packages"
+  ]
+}
+

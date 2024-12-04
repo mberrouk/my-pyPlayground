@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      padding: 0;
+      border: 0;
+    }
+
+    p {
+      font-size: 23px;
+      padding: 10px;
+    }
+
+    .info {
+      display: flex;
+    }
+
+    #board {
+      display: flex;
+      flex-direction: column;
+      width: 800px;
+      height: 800px;
+      flex-wrap: wrap;
+    }
+
+    .square {
+      display: flex;
+      border: solid 1px black;
+      width: 32%;
+      height: 33%;
+
+    }
+
+    #"0-0" {
+      border-left: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="info">
+    <p><strong>Player:</strong> {{ name }} </p>
+    <!-- <br> -->
+    <p><strong>Room:</strong> {{ room }} </p>
+  </div>
+  <div id="board">
+    <div class="square" id="0-0">0-0</div>
+    <div class="square" id="0-1">0-1</div>
+    <div class="square" id="0-2">0-2</div>
+    <div class="square" id="1-0">1-0</div>
+    <div class="square" id="1-1">1-1</div>
+    <div class="square" id="1-2">1-2</div>
+    <div class="square" id="2-0">2-0</div>
+    <div class="square" id="2-1">2-1</div>
+    <div class="square" id="2-2">2-2</div>
+  </div>
+
+  <script>
+
+    // WebSocket Client
+    {
+      document.addEventListener('DOMContentLoaded', () => {
+        const ws = new WebSocket("ws://127.0.0.1:8000/ws/game/2/");
+        ws.onconnect = (e) => {
+          console.log(e);
+        }
+        ws.onreceive = (e) => {
+          console.log(e);
+        }
+        ws.onclose = (e) => {
+          console.log(e);
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
