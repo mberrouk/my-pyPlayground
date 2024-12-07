@@ -156,4 +156,14 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
-        # return await super().disconnect(code)
+        # TODO: stop game
+        await self.channel_layer.group_send(
+            self.group_name,
+            {
+                "type": "syncGameData",
+                "data": {
+                    "event": "error_msg",
+                    "error": "the Player %s has disconnect." % self.symbl,
+                },
+            },
+        )
