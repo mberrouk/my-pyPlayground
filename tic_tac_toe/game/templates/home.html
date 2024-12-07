@@ -20,9 +20,9 @@
     {% endif %}
     <form id="form" action="/" method="post">
       {% csrf_token %}
-      <input id="room-id" type="number" name="room-id" placeholder="Entre room id to join #TODO">
-      <input id="player-name" type="text" name="player-name" value="" > 
-      <button id="button">Create room<button>
+      <input id="room-id" type="number" name="room-id" placeholder="Entre room id to join">
+      <input id="player-name" type="text" name="player-name" value="" required> 
+      <button id="button">Create/Join room</button>
     </form>
   </body>
 
