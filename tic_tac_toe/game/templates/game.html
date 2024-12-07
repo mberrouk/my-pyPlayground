@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,39 +47,29 @@
 <body>
   <div class="info">
     <p><strong>Player:</strong> {{ name }} </p>
-    <!-- <br> -->
     <p><strong>Room:</strong> {{ room }} </p>
+    <p><strong>Victory:</strong> <p id="victory"> </p> </p>
+    <p><strong>Round:</strong> <p id="round"> </p> </p>
+    <p><strong>Symbol:</strong> <p id="symbol"> </p> </p>
+    <p><strong>Turn:</strong> <p id="turn"> </p> </p>
+    <p>
   </div>
   <div id="board">
-    <div class="square" id="0-0">0-0</div>
-    <div class="square" id="0-1">0-1</div>
-    <div class="square" id="0-2">0-2</div>
-    <div class="square" id="1-0">1-0</div>
-    <div class="square" id="1-1">1-1</div>
-    <div class="square" id="1-2">1-2</div>
-    <div class="square" id="2-0">2-0</div>
-    <div class="square" id="2-1">2-1</div>
-    <div class="square" id="2-2">2-2</div>
+    <div class="square" id="1"></div>
+    <div class="square" id="2"></div>
+    <div class="square" id="3"></div>
+    <div class="square" id="4"></div>
+    <div class="square" id="5"></div>
+    <div class="square" id="6"></div>
+    <div class="square" id="7"></div>
+    <div class="square" id="8"></div>
+    <div class="square" id="9"></div>
   </div>
 
-  <script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    // WebSocket Client
-    {
-      document.addEventListener('DOMContentLoaded', () => {
-        const ws = new WebSocket("ws://127.0.0.1:8000/ws/game/2/");
-        ws.onconnect = (e) => {
-          console.log(e);
-        }
-        ws.onreceive = (e) => {
-          console.log(e);
-        }
-        ws.onclose = (e) => {
-          console.log(e);
-        }
-      });
-    }
-  </script>
+
+  <script src="{% static 'js/app.js' %}" type="text/javascript"> </script>
 </body>
 
 </html>

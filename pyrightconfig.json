@@ -3,7 +3,7 @@
   "include": [
     "**/*.py"
   ],
-  "stubPath": "./.stubs/",
+  "stubPath": "/Users/mberrouk/chat_APP/tic_tac_toe/.stubs/",
   "exclude": [
     "**/node_modules",
     "**/__pycache__"
