@@ -10,7 +10,7 @@
   </head>
 
   <body>
-    <h1> Hello </h1>
+    <h1> Tic Tac Toe </h1>
     {% if messages %}
     <ul class="messages">
       {% for message in messages %}
@@ -18,6 +18,8 @@
       {% endfor %}
     </ul>
     {% endif %}
+    <p><strong>"Please enter the Room ID to join an existing room,
+      or leave it empty to create a new room."</strong></p>
     <form id="form" action="/" method="post">
       {% csrf_token %}
       <input id="room-id" type="number" name="room-id" placeholder="Entre room id to join">

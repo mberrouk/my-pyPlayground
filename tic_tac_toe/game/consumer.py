@@ -25,7 +25,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         self.room_id = self.scope["url_route"]["kwargs"]["id"]
         self.group_name = "group_%s" % self.room_id
-        print("room id: ", self.room_id, " group: ", self.group_name)
 
         # accept connection
         await self.accept()
