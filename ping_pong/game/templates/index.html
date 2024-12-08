@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <h1> Ping Pong </h1>
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+  <p><strong>"Please enter the Room ID to join an existing room,
+      or leave it empty to create a new room."</strong></p>
+  <form id="form" action="/" method="post">
+    {% csrf_token %}
+    <input id="room-id" type="number" name="room-id" placeholder="Entre room id to join">
+    <input id="player-name" type="text" name="player-name" value="" required>
+    <button id="button">Create/Join room</button>
+  </form>
+</body>
+
+</html>

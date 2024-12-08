@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <p><strong>name: </strong> {{ name }} </p>
+  <p><strong>room: </strong> {{ id }} </p>
+  <h1> player: <strong id="player-score"> </strongs>
+  </h1>
+  <h1> computer: <strong id="computer-score"></strongs>
+  </h1>
+  <canvas id="game-canvas" height="600" width="800" style="border: solid black ;"></canvas>
+
+  <script>
+    const roomID = {{id}}
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+</body>
+
+</html>
