@@ -50,6 +50,7 @@ class Player {
   }
 
   move(y) {
+    print(`oppon-move: ${y}`)
     draw_rect(boardColor, ({ x: this.x, y: this.y }), ({ width: this.width + 2, height: this.height }));
     this.y = y;
     this.draw();
@@ -139,7 +140,17 @@ ws.onmessage = function(e) {
   }
 
   if (bdEvent === "oppon_move") {
+    print(data.y)
     opponent.move(data.y);
+  }
+
+  if (bdEvent === "ball_movement") {
+    print(data)
+    print(data.moveX)
+    // ball.move(ball.x + ball.velocityX, ball.y + ball.velocityY);
+    BALL.velocityX = data.velocityX;
+    BALL.velocityY = data.velocityY;
+    BALL.move(data.moveX, data.moveY);
   }
   // print(e);
   // print("data received --> ", data)
@@ -310,7 +321,8 @@ function is_collision(player) {
   };
 
   // console.log(player.y, playerPos.top);
-  return ballPos.right > playerPos.left && ballPos.bott > playerPos.top && ballPos.left < playerPos.right && ballPos.top < playerPos.bott;
+  return ballPos.right > playerPos.left && ballPos.bott > playerPos.top
+    && ballPos.left < playerPos.right && ballPos.top < playerPos.bott;
 }
 
 function ballAct() {
