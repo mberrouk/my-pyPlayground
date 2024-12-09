@@ -1,4 +1,6 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+import math
+import asyncio
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
@@ -6,11 +8,10 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         self.room_id = self.scope["url_route"]["kwargs"]["id"]
-        print("id === ", self.room_id)
         self.group_name = "group_%s" % self.room_id
         await self.accept()
 
-        check, membersCnt = await self.room_is_available()
+        check = await self.room_is_available()
         if check:
             await self.channel_layer.group_add(self.group_name, self.channel_name)
 
@@ -19,7 +20,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         chns.remove(self.channel_name)
         self.opponChan = chns[0]
         self.active = True
-        # self.opponChan = chns.
 
         await self.channel_layer.send(
             self.opponChan,
@@ -31,6 +31,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                     "canvasW": self.canvasW,
                     "x": self.properties["x"],
                     "y": self.properties["y"],
+                    "width": self.properties["width"],
+                    "height": self.properties["height"],
                     # "id": ,
                     # "winner": self.symbl,
                 },
@@ -41,18 +43,137 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         event = data["event"]
         if event == "init_game":
             self.oppon = data["data"]
+            # self.oppon["x"] = self.canvasW - self.properties["width"]
             await self.send_json(
                 {
                     "event": "oppon_pos",
                     "data": {
-                        "x": self.canvasW - self.properties["width"],
-                        "y": self.oppon["y"],
+                        "x": self.oppon["x"],
+                        "y": (self.oppon["y"] / self.oppon["height"])
+                        * self.properties["height"],
                     },
                 }
             )
 
             if not self.active:
+                self.ballUP = False
                 await self.init_game()
+
+            else:
+                self.ballUP = True
+                await self.update_ball()
+
+    def is_collistion(self, player):
+        ballRa = int(self.ballprop["radius"])
+        ballT = int(self.ballprop["y"]) - ballRa
+        ballB = int(self.ballprop["y"]) + ballRa
+        ballL = int(self.ballprop["x"]) - ballRa
+        ballR = int(self.ballprop["x"]) + ballRa
+
+        playerT = int(player["y"])
+        playerB = int(player["y"]) + self.properties["height"]
+        playerL = int(player["x"])
+        playerR = int(player["x"]) + self.properties["width"]
+
+        return (
+            ballR > playerL and ballB > playerT and ballL < playerR and ballT < playerB
+        )
+
+    def after_collistion(self, player):
+        print("AFTER COLL")
+        # WHERE THE BALL HIT THE PLAYER
+        collidePoint = self.ballprop["y"] - (player["y"] + player["height"] / 2)
+
+        # NORMALIZATION
+        collidePoint = collidePoint / (player["height"] / 2)
+        # CALCULATE THE ANGLE IN RADIAN
+        angleRad = collidePoint * math.pi / 4
+        # X Direction of the ball when it's hit
+        direction = 1 if self.ballprop["x"] < self.canvasW / 2 else -1
+        # Change velocity of x and y
+        self.ballprop["velocityX"] = (
+            direction * self.ballprop["speed"] * math.cos(angleRad)
+        )
+        self.ballprop["velocityY"] = self.ballprop["speed"] * math.sin(angleRad)
+        self.ballprop["speed"] += 0.5
+
+    async def update_ball(self):
+        if (
+            self.ballprop["y"] + self.ballprop["velocityY"] > self.canvasH
+            or self.ballprop["y"] + self.ballprop["speed"] < 0
+        ):
+            self.ballprop["velocityY"] *= -1
+
+        # TODO: check for winner
+        if int(self.ballprop["x"]) + int(self.ballprop["velocityX"]) > int(
+            self.canvasW
+        ):
+            print("WIN 1")
+            return await self.channel_layer.group_send(
+                self.group_name,
+                {
+                    "type": "ball.movement",
+                    "data": {
+                        "ball": self.ballprop,
+                        "moveX": self.canvasW / 2,
+                        "moveY": self.canvasH / 2,
+                    },
+                },
+            )
+            # return self.close(1000)
+        if int(self.ballprop["x"] + self.ballprop["velocityX"]) < 0:
+            print(self.ballprop["x"], " ", self.ballprop["velocityX"])
+            print("WIN 2")
+            # return self.close(1000)
+            return await self.channel_layer.group_send(
+                self.group_name,
+                {
+                    "type": "ball.movement",
+                    "data": {
+                        "ball": self.ballprop,
+                        "moveX": self.canvasW / 2,
+                        "moveY": self.canvasH / 2,
+                    },
+                },
+            )
+
+        # check collistion
+        if self.is_collistion(self.properties) is True:
+            self.after_collistion(self.properties)
+        elif self.is_collistion(self.oppon) is True:
+            self.after_collistion(self.oppon)
+
+        await self.channel_layer.group_send(
+            self.group_name,
+            {
+                "type": "ball.movement",
+                "data": {
+                    "ball": self.ballprop,
+                    "moveX": self.ballprop["x"] + self.ballprop["velocityX"],
+                    "moveY": self.ballprop["y"] + self.ballprop["velocityY"],
+                },
+            },
+        )
+
+    async def ball_movement(self, data):
+        self.ballprop = data["data"]["ball"]
+        self.ballprop["x"] = data["data"]["moveX"]
+        self.ballprop["y"] = data["data"]["moveY"]
+        await self.send_json(
+            {
+                "event": "ball_movement",
+                "y": data["data"]["ball"]["y"],
+                "x": data["data"]["ball"]["x"],
+                "velocityY": data["data"]["ball"]["velocityY"],
+                "velocityX": data["data"]["ball"]["velocityX"],
+                "moveX": data["data"]["moveX"],
+                "moveY": data["data"]["moveY"],
+            }
+        )
+
+        if self.ballUP:
+            await asyncio.sleep(0.02)
+            await self.update_ball()
 
     def init_data(self, data):
         self.canvasH = int(data["canvasH"])  # data from front
@@ -66,10 +187,14 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             "velocityY": 5,
         }
         self.properties = {
-            "x": 1,
-            "y": (self.canvasH - (self.canvasH / 6)) / 2,
             "height": self.canvasH / 6,
             "width": self.canvasW / 45,
+            "x": (
+                1
+                if len(self.channel_layer.groups[self.group_name]) == 1
+                else (self.canvasW - (self.canvasW / 45))
+            ),
+            "y": (self.canvasH - (self.canvasH / 6)) / 2,
         }
 
     async def receive_json(self, content, **kwargs):
@@ -87,16 +212,15 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 await self.init_game()
 
         if event == "player_move":
+            # Send movement data to the front end.
+            self.properties["y"] = content["y"]
             await self.send_json(
                 {
                     "event": "move",
                     "y": content["y"],
                 }
             )
-
-            print("DEBUG :: ", self.opponChan)
-            print("DEBUG :: ", self.channel_name)
-
+            # Send movement data to the opponent.
             await self.channel_layer.send(
                 self.opponChan,
                 {
@@ -108,22 +232,25 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             )
 
     async def oppon_move(self, data):
+        self.oppon["y"] = (data["data"]["y"] / self.oppon["height"]) * self.properties[
+            "height"
+        ]
         await self.send_json(
             {
                 "event": "oppon_move",
-                "y": data["data"]["y"],
+                "y": (data["data"]["y"] / self.oppon["height"])
+                * self.properties["height"],
             }
         )
 
-    async def room_is_available(self) -> tuple[bool, int]:
-        membersCnt: int = 0
+    async def room_is_available(self) -> bool:
         try:
-            membersCnt = len(self.channel_layer.groups[self.group_name])
+            membersCnt: int = len(self.channel_layer.groups[self.group_name])
             if membersCnt > 2:
                 await self.send_json({"event": "error_msg", "error": "room close."})
                 await self.close(1000)
-                return False, membersCnt
+                return False
 
         except KeyError:
             pass
-        return True, membersCnt
+        return True
