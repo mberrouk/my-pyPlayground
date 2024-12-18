@@ -1,0 +1,6 @@
+from django.contrib import messages as messages
+
+class SuccessMessageMixin:
+    success_message: str
+    def form_valid(self, form): ...
+    def get_success_message(self, cleaned_data): ...

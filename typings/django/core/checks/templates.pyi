@@ -1,0 +1,3 @@
+from . import Tags as Tags, register as register
+
+def check_templates(app_configs, **kwargs): ...

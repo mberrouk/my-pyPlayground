@@ -1,0 +1,6 @@
+from django.core import mail as mail
+from django.core.mail.backends.base import BaseEmailBackend as BaseEmailBackend
+
+class EmailBackend(BaseEmailBackend):
+    def __init__(self, *args, **kwargs) -> None: ...
+    def send_messages(self, messages): ...

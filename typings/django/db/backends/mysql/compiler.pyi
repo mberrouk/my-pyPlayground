@@ -1,0 +1,16 @@
+from django.core.exceptions import FieldError as FieldError, FullResultSet as FullResultSet
+from django.db.models.expressions import Col as Col
+from django.db.models.sql import compiler as compiler
+
+class SQLCompiler(compiler.SQLCompiler):
+    def as_subquery_condition(self, alias, columns, compiler): ...
+
+class SQLInsertCompiler(compiler.SQLInsertCompiler, SQLCompiler): ...
+
+class SQLDeleteCompiler(compiler.SQLDeleteCompiler, SQLCompiler):
+    def as_sql(self): ...
+
+class SQLUpdateCompiler(compiler.SQLUpdateCompiler, SQLCompiler):
+    def as_sql(self): ...
+
+class SQLAggregateCompiler(compiler.SQLAggregateCompiler, SQLCompiler): ...

@@ -1,0 +1,13 @@
+from .base import Loader as BaseLoader
+from _typeshed import Incomplete
+from collections.abc import Generator
+from django.core.exceptions import SuspiciousFileOperation as SuspiciousFileOperation
+from django.template import Origin as Origin, TemplateDoesNotExist as TemplateDoesNotExist
+from django.utils._os import safe_join as safe_join
+
+class Loader(BaseLoader):
+    dirs: Incomplete
+    def __init__(self, engine, dirs: Incomplete | None = None) -> None: ...
+    def get_dirs(self): ...
+    def get_contents(self, origin): ...
+    def get_template_sources(self, template_name) -> Generator[Incomplete]: ...

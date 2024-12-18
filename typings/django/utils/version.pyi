@@ -1,0 +1,19 @@
+from _typeshed import Incomplete
+
+PYPY: Incomplete
+PY38: Incomplete
+PY39: Incomplete
+PY310: Incomplete
+PY311: Incomplete
+PY312: Incomplete
+PY313: Incomplete
+
+def get_version(version: Incomplete | None = None): ...
+def get_main_version(version: Incomplete | None = None): ...
+def get_complete_version(version: Incomplete | None = None): ...
+def get_docs_version(version: Incomplete | None = None): ...
+def get_git_changeset(): ...
+
+version_component_re: Incomplete
+
+def get_version_tuple(version): ...

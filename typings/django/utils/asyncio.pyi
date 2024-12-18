@@ -1,0 +1,3 @@
+from django.core.exceptions import SynchronousOnlyOperation as SynchronousOnlyOperation
+
+def async_unsafe(message): ...

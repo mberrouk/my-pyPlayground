@@ -1,0 +1,13 @@
+from _typeshed import Incomplete
+from collections.abc import Generator
+from django.core.serializers.base import DeserializationError as DeserializationError
+from django.core.serializers.json import DjangoJSONEncoder as DjangoJSONEncoder
+from django.core.serializers.python import Serializer as PythonSerializer
+
+class Serializer(PythonSerializer):
+    internal_use_only: bool
+    def start_serialization(self) -> None: ...
+    def end_object(self, obj) -> None: ...
+    def getvalue(self): ...
+
+def Deserializer(stream_or_string, **options) -> Generator[Incomplete, Incomplete]: ...

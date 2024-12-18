@@ -1,0 +1,9 @@
+from _typeshed import Incomplete
+from asgiref.server import StatelessServer
+
+class Worker(StatelessServer):
+    channels: Incomplete
+    channel_layer: Incomplete
+    def __init__(self, application, channels, channel_layer, max_applications: int = 1000) -> None: ...
+    async def handle(self) -> None: ...
+    async def listener(self, channel) -> None: ...

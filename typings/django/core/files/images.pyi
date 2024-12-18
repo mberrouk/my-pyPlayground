@@ -1,0 +1,9 @@
+from django.core.files import File as File
+
+class ImageFile(File):
+    @property
+    def width(self): ...
+    @property
+    def height(self): ...
+
+def get_image_dimensions(file_or_path, close: bool = False): ...

@@ -1,0 +1,33 @@
+from .adapter import PostGISAdapter as PostGISAdapter
+from .features import DatabaseFeatures as DatabaseFeatures
+from .introspection import PostGISIntrospection as PostGISIntrospection
+from .operations import PostGISOperations as PostGISOperations
+from .schema import PostGISSchemaEditor as PostGISSchemaEditor
+from _typeshed import Incomplete
+from django.db.backends.base.base import NO_DB_ALIAS as NO_DB_ALIAS
+from django.db.backends.postgresql.base import DatabaseWrapper as PsycopgDatabaseWrapper
+from django.db.backends.postgresql.psycopg_any import is_psycopg3 as is_psycopg3
+from psycopg.adapt import Dumper
+
+class GeometryType: ...
+class GeographyType: ...
+class RasterType: ...
+
+class BaseTextDumper(Dumper):
+    def dump(self, obj): ...
+
+class BaseBinaryDumper(Dumper):
+    format: Incomplete
+    def dump(self, obj): ...
+
+def postgis_adapters(geo_oid, geog_oid, raster_oid): ...
+
+class DatabaseWrapper(PsycopgDatabaseWrapper):
+    SchemaEditorClass = PostGISSchemaEditor
+    features_class = DatabaseFeatures
+    ops_class = PostGISOperations
+    introspection_class = PostGISIntrospection
+    def __init__(self, *args, **kwargs) -> None: ...
+    def prepare_database(self) -> None: ...
+    def get_new_connection(self, conn_params): ...
+    def register_geometry_adapters(self, pg_connection, clear_caches: bool = False) -> None: ...

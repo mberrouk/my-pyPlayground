@@ -1,0 +1,6 @@
+from _typeshed import Incomplete
+
+class BaseMiddleware:
+    inner: Incomplete
+    def __init__(self, inner) -> None: ...
+    async def __call__(self, scope, receive, send): ...

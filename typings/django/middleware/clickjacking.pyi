@@ -1,0 +1,6 @@
+from django.conf import settings as settings
+from django.utils.deprecation import MiddlewareMixin as MiddlewareMixin
+
+class XFrameOptionsMiddleware(MiddlewareMixin):
+    def process_response(self, request, response): ...
+    def get_xframe_options_value(self, request, response): ...

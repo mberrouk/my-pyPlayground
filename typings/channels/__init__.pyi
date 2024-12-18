@@ -1,0 +1,3 @@
+from .types import SendOptions as SendOptions
+
+def send(message: str, channel: str | None = None, fail_silently: bool = False, options: SendOptions | None = None) -> None: ...

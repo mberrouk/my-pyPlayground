@@ -1,0 +1,13 @@
+from django.conf import settings as settings
+from django.core import signals as signals
+from django.core.exceptions import BadRequest as BadRequest, PermissionDenied as PermissionDenied, RequestDataTooBig as RequestDataTooBig, SuspiciousOperation as SuspiciousOperation, TooManyFieldsSent as TooManyFieldsSent, TooManyFilesSent as TooManyFilesSent
+from django.http import Http404 as Http404
+from django.http.multipartparser import MultiPartParserError as MultiPartParserError
+from django.urls import get_resolver as get_resolver, get_urlconf as get_urlconf
+from django.utils.log import log_response as log_response
+from django.views import debug as debug
+
+def convert_exception_to_response(get_response): ...
+def response_for_exception(request, exc): ...
+def get_exception_response(request, resolver, status_code, exception): ...
+def handle_uncaught_exception(request, resolver, exc_info): ...

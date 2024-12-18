@@ -1,0 +1,9 @@
+from _typeshed import Incomplete
+from django.apps import apps as apps
+from django.conf import settings as settings
+from django.core import checks as checks
+from django.utils.module_loading import import_string as import_string
+
+def check_user_model(app_configs: Incomplete | None = None, **kwargs): ...
+def check_models_permissions(app_configs: Incomplete | None = None, **kwargs): ...
+def check_middleware(app_configs, **kwargs): ...

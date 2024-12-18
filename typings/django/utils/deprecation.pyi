@@ -1,0 +1,29 @@
+from _typeshed import Incomplete
+
+class RemovedInNextVersionWarning(DeprecationWarning): ...
+class RemovedInDjango60Warning(PendingDeprecationWarning): ...
+RemovedAfterNextVersionWarning = RemovedInDjango60Warning
+
+class warn_about_renamed_method:
+    class_name: Incomplete
+    old_method_name: Incomplete
+    new_method_name: Incomplete
+    deprecation_warning: Incomplete
+    def __init__(self, class_name, old_method_name, new_method_name, deprecation_warning) -> None: ...
+    def __call__(self, f): ...
+
+class RenameMethodsBase(type):
+    renamed_methods: Incomplete
+    def __new__(cls, name, bases, attrs): ...
+
+class DeprecationInstanceCheck(type):
+    def __instancecheck__(self, instance): ...
+
+class MiddlewareMixin:
+    sync_capable: bool
+    async_capable: bool
+    get_response: Incomplete
+    async_mode: Incomplete
+    def __init__(self, get_response) -> None: ...
+    def __call__(self, request): ...
+    async def __acall__(self, request): ...

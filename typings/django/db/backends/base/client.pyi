@@ -1,0 +1,9 @@
+from _typeshed import Incomplete
+
+class BaseDatabaseClient:
+    executable_name: Incomplete
+    connection: Incomplete
+    def __init__(self, connection) -> None: ...
+    @classmethod
+    def settings_to_cmd_args_env(cls, settings_dict, parameters) -> None: ...
+    def runshell(self, parameters) -> None: ...
